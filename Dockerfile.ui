@@ -1,0 +1,23 @@
+# The Streamlit dashboard. Kept separate from the API image because the two
+# scale independently and the UI needs none of the parsing dependencies.
+FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1
+
+RUN pip install --upgrade pip \
+    && pip install "streamlit>=1.40.0" "httpx>=0.27.0" "pandas>=2.0.0" \
+    && useradd --create-home --uid 10002 resumeiq
+
+WORKDIR /srv/resumeiq
+COPY ui ./ui
+
+USER resumeiq
+EXPOSE 8501
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+    CMD python -c "import urllib.request;urllib.request.urlopen('http://localhost:8501/_stcore/health')" || exit 1
+
+CMD ["streamlit", "run", "ui/streamlit_app.py", \
+     "--server.port=8501", "--server.address=0.0.0.0", "--server.headless=true"]

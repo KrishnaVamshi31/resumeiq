@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev,ui]"
+
+      - name: Lint
+        run: ruff check app tests ui
+
+      - name: Type check
+        run: mypy app
+
+      - name: Test
+        # No network access is required: the Anthropic client is stubbed.
+        run: pytest -q --cov=app --cov-report=term-missing --cov-fail-under=85
+
+      - name: Smoke test the CLI
+        run: python -m app.cli analyze tests/fixtures/strong_resume.txt --job tests/fixtures/backend_job.txt -q
+
+  docker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build images
+        run: docker compose build
+      - name: Boot the API and check readiness
+        run: |
+          docker compose up -d api
+          for i in $(seq 1 30); do
+            if curl -fsS http://localhost:8000/health/ready; then exit 0; fi
+            sleep 2
+          done
+          docker compose logs api
+          exit 1

@@ -1,0 +1,40 @@
+Priya Raghavan
+Bengaluru, India | priya.raghavan@example.com | +91 98450 12345
+linkedin.com/in/priyaraghavan | github.com/praghavan
+
+PROFESSIONAL SUMMARY
+Senior backend engineer with 8 years building payment and data platforms at scale.
+Specialise in Python and Go services on AWS, with a track record of cutting latency
+and infrastructure cost on systems handling millions of daily transactions.
+
+PROFESSIONAL EXPERIENCE
+
+Senior Software Engineer | Razorline Technologies | Mar 2021 - Present
+- Rebuilt the payment settlement pipeline in Go, cutting end-to-end processing from 45 minutes to 90 seconds for 2.3 million daily transactions.
+- Led migration of 38 microservices from EC2 to Kubernetes, reducing monthly infrastructure spend by 34% and deployment time from 25 minutes to 4.
+- Designed an event-driven reconciliation service on Kafka that eliminated 1,200 manual finance hours per quarter.
+- Mentored 5 engineers through promotion, and introduced the code review standards now used across 3 teams.
+
+Software Engineer | Finwave Solutions | Jul 2018 - Feb 2021
+- Built a FastAPI reporting service backed by PostgreSQL, serving 40,000 merchant dashboards with a p99 latency of 120 ms.
+- Automated the nightly ETL with Airflow, cutting job failures from 18 per month to fewer than 2.
+- Introduced pytest and CI/CD via GitHub Actions, raising test coverage from 22% to 81%.
+
+Junior Developer | Kavitha Systems | Aug 2016 - Jun 2018
+- Developed internal Django tools that replaced 6 spreadsheet workflows for the operations team.
+- Optimised slow SQL queries, improving report generation speed by 60%.
+
+EDUCATION
+B.Tech in Computer Science, National Institute of Technology Trichy, 2016
+GPA: 8.6/10
+
+TECHNICAL SKILLS
+Languages: Python, Go, SQL, JavaScript, Bash
+Backend: FastAPI, Django, gRPC, REST APIs, Microservices
+Data: PostgreSQL, Redis, Kafka, Airflow, Elasticsearch
+Cloud & DevOps: AWS, Docker, Kubernetes, Terraform, GitHub Actions, Prometheus, Grafana
+Practices: System Design, Code Review, Unit Testing, Agile
+
+CERTIFICATIONS
+AWS Certified Solutions Architect - Associate, 2022
+Certified Kubernetes Application Developer (CKAD), 2023

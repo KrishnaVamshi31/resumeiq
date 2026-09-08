@@ -1,0 +1,30 @@
+Senior Backend Engineer, Payments
+Northwind Financial - Bengaluru (Hybrid)
+
+About the role
+You will own the services that move money for millions of customers. This is a
+hands-on senior role on a team of eight engineers.
+
+Responsibilities
+- Design, build and operate distributed backend services handling high transaction volume.
+- Own reliability for payment-critical systems, including on-call and incident response.
+- Partner with finance and product to turn reconciliation requirements into services.
+- Raise engineering standards through code review and mentoring.
+
+Required Qualifications
+- 6+ years of professional backend engineering experience.
+- Deep expertise in Python and strong SQL skills, with production PostgreSQL experience.
+- Hands-on experience with Kubernetes and Docker in production.
+- Experience designing event-driven systems with Kafka or an equivalent message queue.
+- Demonstrated ownership of system design for high-availability services on AWS.
+- Bachelor's degree in Computer Science or equivalent practical experience.
+
+Preferred Qualifications
+- Experience with Go or Rust for performance-critical services.
+- Familiarity with Terraform and infrastructure as code.
+- Background in payments, settlement or financial reconciliation.
+- Exposure to observability tooling such as Prometheus and Grafana.
+
+Benefits
+Competitive salary, equity, private health cover and an annual learning budget.
+Northwind Financial is an equal opportunity employer.

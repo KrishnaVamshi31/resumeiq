@@ -1,0 +1,20 @@
+JOHN SMITH
+
+Career Objective
+I am a passionate and hardworking developer looking for a dynamic role where I can
+grow. I am a team player and a self-starter with excellent communication skills.
+
+Work History
+
+Developer at TechCorp
+Responsible for the company website and various applications. Worked on different
+projects using multiple technologies. Helped the team with day to day tasks and
+assisted with deployments. Involved in meetings with stakeholders. Duties included
+writing code and fixing bugs as required by the business.
+
+Junior Developer at StartupCo
+Responsible for maintaining legacy systems. Worked on bug fixes. Helped with testing.
+
+What I Know
+I know javascript and I have exposure to react. Familiar with databases and I am
+learning about the cloud. I have used git before.

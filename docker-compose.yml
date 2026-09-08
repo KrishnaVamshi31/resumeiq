@@ -1,0 +1,52 @@
+# Local / single-host deployment: the API plus the Streamlit dashboard.
+# For production, point RESUMEIQ_DATABASE_URL at managed Postgres and run the
+# api service behind your own ingress.
+
+services:
+  api:
+    build:
+      context: .
+      target: runtime
+    image: resumeiq-api:1.0.0
+    environment:
+      RESUMEIQ_ENV: production
+      RESUMEIQ_LOG_FORMAT: json
+      RESUMEIQ_LOG_LEVEL: INFO
+      RESUMEIQ_DATABASE_URL: sqlite:////data/resumeiq.db
+      RESUMEIQ_CORS_ORIGINS: http://localhost:8501
+      # Optional. Without it the service still returns full deterministic
+      # analysis and reports that AI coaching is unavailable.
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      RESUMEIQ_LLM_MODEL: ${RESUMEIQ_LLM_MODEL:-claude-opus-5}
+    ports:
+      - "8000:8000"
+    volumes:
+      - resumeiq-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+  ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.ui
+    image: resumeiq-ui:1.0.0
+    environment:
+      RESUMEIQ_API_URL: http://api:8000
+    ports:
+      - "8501:8501"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  resumeiq-data:

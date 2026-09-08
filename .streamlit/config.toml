@@ -1,0 +1,10 @@
+[server]
+# Resumes are small; this also bounds the memory a single request can consume.
+maxUploadSize = 5
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+base = "light"
+primaryColor = "#2563eb"
