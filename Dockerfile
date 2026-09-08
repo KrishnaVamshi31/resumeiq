@@ -60,5 +60,10 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
 
 # One worker per container; scale with replicas so the in-process rate limiter
 # and metrics registry stay coherent per instance.
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", \
-     "--workers", "1", "--log-config", "/dev/null"]
+#
+# Booting through the project CLI rather than the uvicorn binary: `serve`
+# passes log_config=None, which leaves our JSON logging in place. The uvicorn
+# CLI has no equivalent -- `--log-config` always hands the path to
+# logging.config.fileConfig, and an empty file (/dev/null) makes it raise
+# `RuntimeError: /dev/null is an empty file` at startup.
+CMD ["python", "-m", "app.cli", "serve"]
