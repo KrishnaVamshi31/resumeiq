@@ -1,0 +1,55 @@
+# Render blueprint - deploys the API and the dashboard as two web services.
+#
+#   1. Push this repo to GitHub (already done).
+#   2. https://dashboard.render.com/blueprints -> New Blueprint Instance.
+#   3. Pick the resumeiq repo. Render reads this file and creates both services.
+#   4. Apply. The API gets a URL first; paste it into RESUMEIQ_API_URL on the
+#      UI service (or into the dashboard's own "API URL" sidebar field).
+#
+# Free-tier notes, so nothing is a surprise:
+#   - Services sleep after ~15 minutes idle and take ~30s to wake on the next
+#     request. The first analysis after a sleep will feel slow.
+#   - The filesystem is ephemeral: the SQLite history resets on every restart.
+#     Scores are unaffected - they are recomputed per request, never cached.
+#     For durable history, add a Postgres instance and set RESUMEIQ_DATABASE_URL.
+#   - 512 MB RAM is enough; the service holds no model in memory.
+
+services:
+  - type: web
+    name: resumeiq-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+    healthCheckPath: /health
+    envVars:
+      - key: RESUMEIQ_ENV
+        value: production
+      - key: RESUMEIQ_LOG_FORMAT
+        value: json
+      - key: RESUMEIQ_LOG_LEVEL
+        value: INFO
+      # Ephemeral on the free plan; swap for a Postgres URL to keep history.
+      - key: RESUMEIQ_DATABASE_URL
+        value: sqlite:////data/resumeiq.db
+      # The dashboard calls the API server-side, so this only needs to list a
+      # browser origin if you point a front end of your own at the API.
+      - key: RESUMEIQ_CORS_ORIGINS
+        value: "*"
+      # Optional. Left unset, the service returns full deterministic analysis
+      # and reports that AI coaching is unavailable. `sync: false` means Render
+      # prompts you for it instead of storing it in this file.
+      - key: ANTHROPIC_API_KEY
+        sync: false
+
+  - type: web
+    name: resumeiq-ui
+    runtime: docker
+    dockerfilePath: ./Dockerfile.ui
+    plan: free
+    region: oregon
+    envVars:
+      # Set to the API service's URL once it deploys, e.g.
+      # https://resumeiq-api.onrender.com
+      - key: RESUMEIQ_API_URL
+        sync: false

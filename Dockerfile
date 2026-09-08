@@ -52,11 +52,15 @@ COPY pyproject.toml README.md ./
 RUN mkdir -p /data && chown -R resumeiq:resumeiq /data /srv/resumeiq
 
 USER resumeiq
+
+# Managed platforms inject the port to bind as $PORT and route only to it;
+# `Settings.port` reads it, and this default covers plain `docker run`.
+ENV PORT=8000
 EXPOSE 8000
 VOLUME ["/data"]
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD curl -fsS http://localhost:8000/health || exit 1
+    CMD curl -fsS "http://localhost:${PORT}/health" || exit 1
 
 # One worker per container; scale with replicas so the in-process rate limiter
 # and metrics registry stay coherent per instance.

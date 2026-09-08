@@ -14,10 +14,16 @@ WORKDIR /srv/resumeiq
 COPY ui ./ui
 
 USER resumeiq
+
+# Managed platforms inject the port to bind as $PORT and route only to it;
+# locally there is no such variable, so 8501 is the fallback.
+ENV PORT=8501
 EXPOSE 8501
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
-    CMD python -c "import urllib.request;urllib.request.urlopen('http://localhost:8501/_stcore/health')" || exit 1
+    CMD python -c "import os,urllib.request;urllib.request.urlopen(f\"http://localhost:{os.environ['PORT']}/_stcore/health\")" || exit 1
 
-CMD ["streamlit", "run", "ui/streamlit_app.py", \
-     "--server.port=8501", "--server.address=0.0.0.0", "--server.headless=true"]
+# Shell form so $PORT is expanded at container start rather than build time.
+CMD streamlit run ui/streamlit_app.py \
+      --server.port="$PORT" --server.address=0.0.0.0 --server.headless=true \
+      --server.enableCORS=false --server.enableXsrfProtection=true

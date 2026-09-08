@@ -1,5 +1,20 @@
 # Deployment
 
+## Managed platform (public URL)
+
+`render.yaml` is a Render blueprint that creates both services from this repo:
+
+1. Push to GitHub (done).
+2. <https://dashboard.render.com/blueprints> → **New Blueprint Instance**.
+3. Select the `resumeiq` repo → **Apply**.
+4. When the API service is live, copy its URL into `RESUMEIQ_API_URL` on the UI
+   service (or just type it into the dashboard's own "API URL" sidebar field).
+
+Both images bind to `$PORT` when the platform sets one, falling back to
+8000/8501 locally, so the same images run unchanged on Render, Railway, Fly or
+Heroku. Free-tier caveats (sleep on idle, ephemeral SQLite) are documented in
+`render.yaml` itself.
+
 ## Docker Compose (single host)
 
 ```bash

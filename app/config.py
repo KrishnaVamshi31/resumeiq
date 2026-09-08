@@ -5,7 +5,7 @@ from __future__ import annotations
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import Field, field_validator
+from pydantic import AliasChoices, Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -26,7 +26,13 @@ class Settings(BaseSettings):
     log_level: str = Field(default="INFO", alias="RESUMEIQ_LOG_LEVEL")
     log_format: Literal["json", "console"] = Field(default="json", alias="RESUMEIQ_LOG_FORMAT")
     host: str = Field(default="0.0.0.0", alias="RESUMEIQ_HOST")
-    port: int = Field(default=8000, alias="RESUMEIQ_PORT")
+    # Every PaaS (Render, Railway, Fly, Heroku) injects the port to bind as
+    # `PORT` and routes traffic only to that port. It is checked first so a
+    # deployment works with no platform-specific configuration, while
+    # `RESUMEIQ_PORT` stays available for local use.
+    port: int = Field(
+        default=8000, validation_alias=AliasChoices("PORT", "RESUMEIQ_PORT")
+    )
     cors_origins: str = Field(default="http://localhost:8501", alias="RESUMEIQ_CORS_ORIGINS")
 
     # --- Storage ---------------------------------------------------------
